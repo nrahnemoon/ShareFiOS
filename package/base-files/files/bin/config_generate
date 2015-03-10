@@ -32,7 +32,7 @@ generate_network() {
 
 	[ -n "$ifname" ] || return
 	[ "$create_vlan" -eq 1 ] && case $1 in
-	lan) vlan=1;;
+	wirelan) vlan=1;;
 	wan) vlan=2;;
 	*)
 		vlan=$next_vlan
@@ -50,10 +50,10 @@ set network.$1.macaddr='$macaddr'
 EOF
 
 	case $1 in
-	lan) uci -q batch <<EOF
+	wirelan) uci -q batch <<EOF
 set network.$1.type='bridge'
 set network.$1.proto='static'
-set network.$1.ipaddr='192.168.1.1'
+set network.$1.ipaddr='192.168.2.1'
 set network.$1.netmask='255.255.255.0'
 set network.$1.ip6assign='60'
 EOF
@@ -67,6 +67,43 @@ set network.wan6.proto='dhcpv6'
 EOF
 		;;
 	esac
+
+	uci -q batch <<EOF
+delete network.wwan
+set network.wwan='interface'
+set network.wwan.proto='dhcp'
+EOF
+
+	uci -q batch <<EOF
+delete network.publan
+set network.publan='interface'
+set network.publan.force_link=1
+set network.publan.proto='static'
+set network.publan.ipaddr='192.168.3.1'
+set network.publan.netmask='255.255.255.0'
+set network.publan.ip6assign='60'
+EOF
+
+	uci -q batch <<EOF
+delete network.privlan
+set network.privlan='interface'
+set network.privlan.force_link=1
+set network.privlan.proto='static'
+set network.privlan.ipaddr='192.168.4.1'
+set network.privlan.netmask='255.255.255.0'
+set network.privlan.ip6assign='60'
+EOF
+
+	uci -q batch <<EOF
+delete network.priv5lan
+set network.priv5lan='interface'
+set network.priv5lan.force_link=1
+set network.priv5lan.proto='static'
+set network.priv5lan.ipaddr='192.168.5.1'
+set network.priv5lan.netmask='255.255.255.0'
+set network.priv5lan.ip6assign='60'
+EOF
+
 }
 
 generate_switch_vlan() {
@@ -75,7 +112,7 @@ generate_switch_vlan() {
 	local cpu_port=$3
 
 	case $vlan in
-	lan)	vlan=1;;
+	wirelan)	vlan=1;;
 	wan)	vlan=2;;
 	*)	vlan=${vlan##vlan};;
 	esac

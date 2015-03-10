@@ -52,6 +52,16 @@ ucidef_set_interface_lan() {
 	json_select ..
 }
 
+ucidef_set_interfaces_wirelan_wan() {
+	local wirelan_if=$1
+	local wan_if=$2
+
+	json_select_object network
+	_ucidef_set_interface wirelan $wirelan_if
+	_ucidef_set_interface wan $wan_if
+	json_select ..
+}
+
 ucidef_set_interfaces_lan_wan() {
 	local lan_if=$1
 	local wan_if=$2
@@ -98,7 +108,7 @@ ucidef_add_switch_vlan() {
 	local cpu_port=''
 
 	case $vlan in
-	1)	vlan=lan;;
+	1)	vlan=wirelan;;
 	2)	vlan=wan;;
 	*)	vlan=vlan$vlan;;
 	esac

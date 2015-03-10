@@ -229,7 +229,7 @@ case $board in
 		ucidef_set_led_default "power" "power" "nexx:blue:power" "0"
 		;;
 	xiaomi-miwifi-mini)
-		ucidef_set_led_default "power" "power" "xiaomi:red:status" "1"
+		ucidef_set_led_default "power" "power" "xiaomi:blue:status" "1"
 		;;
 	y1 |\
 	y1s)
