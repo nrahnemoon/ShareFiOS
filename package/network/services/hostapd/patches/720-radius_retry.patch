@@ -1,0 +1,20 @@
+--- a/src/radius/radius_client.c
++++ b/src/radius/radius_client.c
+@@ -658,7 +658,7 @@
+ 	}
+ 
+ 	if (msg_type == RADIUS_ACCT || msg_type == RADIUS_ACCT_INTERIM) {
+-		if (conf->acct_server == NULL || radius->acct_sock < 0) {
++		if (conf->acct_server == NULL) {
+ 			hostapd_logger(radius->ctx, NULL,
+ 				       HOSTAPD_MODULE_RADIUS,
+ 				       HOSTAPD_LEVEL_INFO,
+@@ -672,7 +672,7 @@
+ 		s = radius->acct_sock;
+ 		conf->acct_server->requests++;
+ 	} else {
+-		if (conf->auth_server == NULL || radius->auth_sock < 0) {
++		if (conf->auth_server == NULL) {
+ 			hostapd_logger(radius->ctx, NULL,
+ 				       HOSTAPD_MODULE_RADIUS,
+ 				       HOSTAPD_LEVEL_INFO,
